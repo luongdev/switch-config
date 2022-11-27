@@ -4,29 +4,26 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.util.Arrays;
 import java.util.Properties;
 
-@Configuration
-@EnableTransactionManagement
-@EnableJpaRepositories(
-        basePackageClasses = Domains.class,
-        transactionManagerRef = "publicTransactionManager",
-        entityManagerFactoryRef = "publicEntityManagerFactory"
-)
+//@Configuration
+//@EnableTransactionManagement
+//@EnableJpaRepositories(
+//        transactionManagerRef = "publicTransactionManager",
+//        entityManagerFactoryRef = "publicEntityManagerFactory"
+//)
 @PropertySource(value = {"classpath:public.properties"})
-public class PublicDbConfiguration {
+public abstract class AbstractPublicDomainConfiguration {
 
     @Value("${database.host:localhost}")
     private String dbHost;
@@ -42,6 +39,15 @@ public class PublicDbConfiguration {
 
     @Value("${database.name}")
     private String dbName;
+
+    private String[] scanPackages = {Domain.class.getPackage().getName()};
+
+    protected void addScanPackages(String... scanPackages) {
+        var result = Arrays.copyOf(this.scanPackages, this.scanPackages.length + scanPackages.length);
+        System.arraycopy(scanPackages, 0, result, this.scanPackages.length, scanPackages.length);
+
+        this.scanPackages = result;
+    }
 
     @Bean
     @Primary
@@ -59,7 +65,7 @@ public class PublicDbConfiguration {
     public LocalContainerEntityManagerFactoryBean defaultEntityManagerFactory(DataSource dataSource) {
         var em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
-        em.setPackagesToScan(Domain.class.getPackage().getName());
+        em.setPackagesToScan(scanPackages);
         em.setPersistenceUnitName("DEFAULT-PERSISTENCE-UNIT");
 
         var vendorAdapter = new HibernateJpaVendorAdapter();

@@ -64,12 +64,8 @@ public class Domain {
         ds.setJdbcUrl(getJdbcUrl(dbName));
         ds.setUsername(dbUser);
         ds.setPassword(dbPassword);
-        ds.setConnectionInitSql("""
-
-                """);
-
         ds.setConnectionTestQuery("select 1");
-        ds.setPoolName(String.format("%s-%s-DSPOOL", this.domain, this.dbName));
+        ds.setPoolName(String.format("%s-DSPOOL", this.dbName).toUpperCase());
         ds.setDriverClassName("org.postgresql.Driver");
 
         return ds;

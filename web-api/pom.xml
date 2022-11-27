@@ -26,17 +26,27 @@
         <dependency>
             <groupId>luongdev</groupId>
             <artifactId>common</artifactId>
-            <version>0.1.0</version>
+            <version>${parent.version}</version>
         </dependency>
         <dependency>
             <groupId>luongdev</groupId>
             <artifactId>tenancy</artifactId>
-            <version>0.1.0</version>
+            <version>${parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>luongdev</groupId>
+            <artifactId>configuration</artifactId>
+            <version>${parent.version}</version>
         </dependency>
         <dependency>
             <groupId>luongdev</groupId>
             <artifactId>domain</artifactId>
-            <version>0.1.0</version>
+            <version>${parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>luongld</groupId>
+            <artifactId>spring-cqrs</artifactId>
+            <version>0.0.1</version>
         </dependency>
     </dependencies>
 
