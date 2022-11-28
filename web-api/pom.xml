@@ -44,6 +44,11 @@
             <version>${parent.version}</version>
         </dependency>
         <dependency>
+            <groupId>luongdev</groupId>
+            <artifactId>redis-connector</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+        <dependency>
             <groupId>luongld</groupId>
             <artifactId>spring-cqrs</artifactId>
             <version>0.0.1</version>

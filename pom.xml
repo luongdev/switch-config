@@ -33,6 +33,7 @@
         <module>configuration</module>
         <module>tenancy</module>
         <module>web-api</module>
+        <module>redis-connector</module>
     </modules>
 
     <dependencies>

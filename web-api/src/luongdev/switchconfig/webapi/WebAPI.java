@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.redis.core.RedisTemplate;
 
 @SpringBootApplication(scanBasePackages = {
         "luongdev.switchconfig.tenancy",
@@ -31,6 +32,9 @@ public class WebAPI implements CommandLineRunner {
     @Autowired
     Bus bus;
 
+    @Autowired
+    RedisTemplate<String, String> redisTemplate;
+
 
     public static void main(String[] args) {
         SpringApplication.run(WebAPI.class, args);
@@ -38,6 +42,8 @@ public class WebAPI implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+
+        redisTemplate.opsForHash().put("Object_key", "Hash_key", "Hash_value");
 //        resolver.publicDomain();
 //
 //        var a = bus.execute(new CreateAccessControlCommand(
