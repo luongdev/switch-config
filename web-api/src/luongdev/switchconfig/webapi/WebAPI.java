@@ -1,5 +1,7 @@
 package luongdev.switchconfig.webapi;
 
+import luongdev.switchconfig.common.Caches;
+import luongdev.switchconfig.configuration.acl.commands.GenerateAccessControlXmlCommand;
 import luongdev.switchconfig.domain.extension.Extensions;
 import luongdev.switchconfig.tenancy.Domains;
 import luongdev.switchconfig.tenancy.datasource.DomainIdentifierResolver;
@@ -42,7 +44,7 @@ public class WebAPI implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        redisTemplate.opsForHash().put("Object_key", "Hash_key", "Hash_value");
+//        redisTemplate.opsForHash().put("Object_key", "Hash_key", "Hash_value");
 //        resolver.publicDomain();
 //
 //        var a = bus.execute(new CreateAccessControlCommand(
@@ -56,7 +58,11 @@ public class WebAPI implements CommandLineRunner {
 //
 //        );
 //
-//        System.out.println(bus.execute(new GenerateAccessControlXmlCommand()));
+        var xml = bus.execute(new GenerateAccessControlXmlCommand());
+
+        redisTemplate.opsForHash().put(Caches.CONFIGURATIONS.name(), "acl.conf", xml);
+
+        System.out.println(xml);
 
 //        var domain = new Domain("voice.metechvn.com");
 //        domain.setDbHost("localhost");
