@@ -2,9 +2,7 @@ package luongdev.switchconfig.webapi;
 
 import luongdev.switchconfig.configuration.acl.commands.CreateAccessControlCommand;
 import luongdev.switchconfig.configuration.acl.commands.GenerateAccessControlXmlCommand;
-import luongdev.switchconfig.domain.extension.Extension;
 import luongdev.switchconfig.domain.extension.Extensions;
-import luongdev.switchconfig.tenancy.Domain;
 import luongdev.switchconfig.tenancy.Domains;
 import luongdev.switchconfig.tenancy.datasource.DomainIdentifierResolver;
 import luongld.cqrs.Bus;
@@ -40,33 +38,39 @@ public class WebAPI implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        resolver.publicDomain();
+//        resolver.publicDomain();
+//
+//        var a = bus.execute(new CreateAccessControlCommand(
+//                        "event_socket",
+//                        false
+//                )
+//                        .allow("127.0.0.1/32", "voice.metechvn.com")
+//                        .allow("192.168.100.10/32", "voice.metechvn.com")
+//                        .allow("172.16.88.0/24", "voice.metechvn.com")
+//                        .deny("172.16.86.0/24", "voice.metechvn.com")
+//
+//        );
+//
+//        System.out.println(bus.execute(new GenerateAccessControlXmlCommand()));
 
-        var a = bus.execute(new CreateAccessControlCommand(
-                "event_socket",
-                false
-        ));
-
-        System.out.println(bus.execute(new GenerateAccessControlXmlCommand()));
-
-        var domain = new Domain("voice.metechvn.com");
-        domain.setDbHost("localhost");
-        domain.setDbPassword("Default");
-
-        domains.save(domain);
-
-        resolver.setCurrentDomain("voice.metechvn.com");
-
-        var ext = new Extension();
-        ext.setExtension(1000);
-        ext.setAccountCode("");
-        ext.setCallTimeout(20);
-        ext.setDomain("public");
-        ext.setPassword("public");
-        ext.setEnabled(true);
-        ext.setLimitMax(0);
-        ext.setDialString("");
-
-        extensions.save(ext);
+//        var domain = new Domain("voice.metechvn.com");
+//        domain.setDbHost("localhost");
+//        domain.setDbPassword("Default");
+//
+//        domains.save(domain);
+//
+//        resolver.setCurrentDomain("voice.metechvn.com");
+//
+//        var ext = new Extension();
+//        ext.setExtension(1000);
+//        ext.setAccountCode("");
+//        ext.setCallTimeout(20);
+//        ext.setDomain("public");
+//        ext.setPassword("public");
+//        ext.setEnabled(true);
+//        ext.setLimitMax(0);
+//        ext.setDialString("");
+//
+//        extensions.save(ext);
     }
 }

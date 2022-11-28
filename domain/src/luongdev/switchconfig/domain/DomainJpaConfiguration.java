@@ -5,6 +5,7 @@ import luongdev.switchconfig.tenancy.datasource.DomainIdentifierResolver;
 import org.hibernate.MultiTenancyStrategy;
 import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -25,6 +26,12 @@ import java.util.HashMap;
         entityManagerFactoryRef = "domainEntityManagerFactory"
 )
 public class DomainJpaConfiguration {
+
+    private final JpaProperties jpaProperties;
+
+    public DomainJpaConfiguration(JpaProperties jpaProperties) {
+        this.jpaProperties = jpaProperties;
+    }
 
     @Bean(name = "domainJpaVendorAdapter")
     public JpaVendorAdapter jpaVendorAdapter() {
@@ -55,9 +62,12 @@ public class DomainJpaConfiguration {
         properties.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
         properties.put(Environment.MULTI_TENANT_CONNECTION_PROVIDER, domainConnectionProvider);
         properties.put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, domainIdentifierResolver);
-        properties.put(Environment.SHOW_SQL, false);
-        properties.put(Environment.FORMAT_SQL, false);
+        properties.put(Environment.SHOW_SQL, jpaProperties.isShowSql());
+        properties.put(Environment.FORMAT_SQL, true);
         properties.put(Environment.HBM2DDL_AUTO, "update");
+        properties.put(Environment.ORDER_INSERTS, "true");
+        properties.put(Environment.ORDER_UPDATES, "true");
+
         em.setJpaPropertyMap(properties);
 
         return em;

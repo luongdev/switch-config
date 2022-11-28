@@ -47,6 +47,10 @@ public class AccessControl {
         this.accessControlDetails.put(detail.getId(), detail);
     }
 
+    public void addDetail(String cidr, String domain, boolean isAllow) {
+        addDetail(cidr, domain, isAllow, null);
+    }
+
     public void removeDetail(UUID id) {
         if (!this.accessControlDetails.containsKey(id)) return;
 
