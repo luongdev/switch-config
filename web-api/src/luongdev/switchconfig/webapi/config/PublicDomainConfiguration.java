@@ -10,7 +10,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories(
         basePackages = {
                 "luongdev.switchconfig.tenancy",
-                "luongdev.switchconfig.configuration"
+                "luongdev.switchconfig.cluster",
+                "luongdev.switchconfig.configuration",
         },
         transactionManagerRef = "publicTransactionManager",
         entityManagerFactoryRef = "publicEntityManagerFactory"
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class PublicDomainConfiguration extends AbstractPublicDomainConfiguration {
 
     public PublicDomainConfiguration() {
+        addScanPackages("luongdev.switchconfig.cluster");
         addScanPackages("luongdev.switchconfig.configuration");
     }
 }

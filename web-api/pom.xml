@@ -26,27 +26,32 @@
         <dependency>
             <groupId>luongdev</groupId>
             <artifactId>common</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>luongdev</groupId>
             <artifactId>tenancy</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>luongdev</groupId>
             <artifactId>configuration</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>luongdev</groupId>
             <artifactId>domain</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>luongdev</groupId>
+            <artifactId>cluster</artifactId>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>luongdev</groupId>
             <artifactId>redis-connector</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>luongld</groupId>

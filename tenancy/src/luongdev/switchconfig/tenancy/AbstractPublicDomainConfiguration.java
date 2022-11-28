@@ -13,6 +13,10 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Properties;
 
@@ -52,12 +56,16 @@ public abstract class AbstractPublicDomainConfiguration {
     @Bean
     @Primary
     public DataSource datasource() {
-        return DataSourceBuilder.create()
+        var ds = DataSourceBuilder.create()
                 .driverClassName("org.postgresql.Driver")
                 .url(String.format("jdbc:postgresql://%s:%s/%s", dbHost, dbPort, dbName))
                 .username(dbUser)
                 .password(dbPassword)
                 .build();
+
+        initDataSourceSchema(ds);
+
+        return ds;
     }
 
     @Primary
@@ -99,4 +107,16 @@ public abstract class AbstractPublicDomainConfiguration {
         return properties;
     }
 
+    private void initDataSourceSchema(DataSource ds) {
+        try (Statement statement = ds.getConnection().createStatement()) {
+            statement.executeQuery("SELECT count(*) FROM information_schema.schemata WHERE schema_name = 'cluster'");
+            ResultSet resultSet = statement.getResultSet();
+            resultSet.next();
+            int count = resultSet.getInt(1);
+
+            if (count <= 0) statement.executeUpdate("CREATE SCHEMA \"cluster\"");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

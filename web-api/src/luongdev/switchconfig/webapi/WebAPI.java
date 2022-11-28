@@ -1,7 +1,5 @@
 package luongdev.switchconfig.webapi;
 
-import luongdev.switchconfig.configuration.acl.commands.CreateAccessControlCommand;
-import luongdev.switchconfig.configuration.acl.commands.GenerateAccessControlXmlCommand;
 import luongdev.switchconfig.domain.extension.Extensions;
 import luongdev.switchconfig.tenancy.Domains;
 import luongdev.switchconfig.tenancy.datasource.DomainIdentifierResolver;
@@ -15,6 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 @SpringBootApplication(scanBasePackages = {
         "luongdev.switchconfig.tenancy",
         "luongdev.switchconfig.domain",
+        "luongdev.switchconfig.cluster",
         "luongdev.switchconfig.configuration",
         "luongdev.switchconfig.webapi"
 })

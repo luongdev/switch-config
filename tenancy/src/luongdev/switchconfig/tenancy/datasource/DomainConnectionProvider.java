@@ -91,7 +91,7 @@ public class DomainConnectionProvider
         Connection connection;
         Statement statement = null;
         try {
-            var dbName = domain.getDomain().replaceAll("\\.", "_");
+            var dbName = domain.getDomain().replaceAll("\\.", "_").replaceAll("-", "");
             connection = DriverManager.getConnection(String.format("jdbc:postgresql://%s:%s/", dbHost, dbPort), dbUser, dbPassword);
             statement = connection.createStatement();
             statement.executeQuery("SELECT count(*) FROM pg_database WHERE datname = '" + dbName + "'");
