@@ -2,6 +2,7 @@ package luongdev.switchconfig.webapi;
 
 import luongdev.switchconfig.common.esl.CliExecutor;
 import luongdev.switchconfig.domain.extension.Extensions;
+import luongdev.switchconfig.domain.extension.commands.CreateExtensionCommand;
 import luongdev.switchconfig.tenancy.Domains;
 import luongdev.switchconfig.tenancy.datasource.DomainIdentifierResolver;
 import luongld.cqrs.Bus;
@@ -82,6 +83,6 @@ public class WebAPI implements CommandLineRunner {
 //
 //        System.out.println(res.get(0));
 
-//        bus.execute(new CreateExtensionCommand("10000", "voice.metechvn.com"));
+        bus.execute(new CreateExtensionCommand("10000", "voice1.metechvn.com"));
     }
 }
