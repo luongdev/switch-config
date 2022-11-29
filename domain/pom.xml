@@ -21,8 +21,20 @@
 
         <dependency>
             <groupId>luongdev</groupId>
+            <artifactId>common</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>luongdev</groupId>
             <artifactId>tenancy</artifactId>
             <version>0.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>luongld</groupId>
+            <artifactId>cqrs</artifactId>
+            <version>0.0.1</version>
         </dependency>
     </dependencies>
 

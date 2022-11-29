@@ -1,8 +1,7 @@
 CREATE TABLE "public"."extensions" (
-  "extension" int4 NOT NULL,
+  "extension" varchar(20) NOT NULL,
   "account_code" varchar(255) COLLATE "pg_catalog"."default",
   "call_timeout" int4 NOT NULL,
-  "dial_string" varchar(510) COLLATE "pg_catalog"."default" NOT NULL,
   "domain" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "enabled" bool NOT NULL,
   "force_ping" bool NOT NULL,

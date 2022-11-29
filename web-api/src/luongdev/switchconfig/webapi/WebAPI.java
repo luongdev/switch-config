@@ -1,7 +1,6 @@
 package luongdev.switchconfig.webapi;
 
-import luongdev.switchconfig.common.Caches;
-import luongdev.switchconfig.configuration.acl.commands.GenerateAccessControlXmlCommand;
+import luongdev.switchconfig.common.esl.CliExecutor;
 import luongdev.switchconfig.domain.extension.Extensions;
 import luongdev.switchconfig.tenancy.Domains;
 import luongdev.switchconfig.tenancy.datasource.DomainIdentifierResolver;
@@ -36,6 +35,8 @@ public class WebAPI implements CommandLineRunner {
     @Autowired
     RedisTemplate<String, String> redisTemplate;
 
+    @Autowired
+    CliExecutor cliExecutor;
 
     public static void main(String[] args) {
         SpringApplication.run(WebAPI.class, args);
@@ -43,6 +44,18 @@ public class WebAPI implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+
+//        resolver.publicDomain();
+//
+//        var domain = new Domain("voice.metechvn.com");
+//        domain.setDbPassword("Default");
+//        domain.setDbHost("localhost");
+//        domain.setDbPort((short) 5432);
+//        domain.setDbUser("postgres");
+//        domain.setEnabled(true);
+//
+//        domains.save(domain);
+
 
 //        redisTemplate.opsForHash().put("Object_key", "Hash_key", "Hash_value");
 //        resolver.publicDomain();
@@ -58,30 +71,17 @@ public class WebAPI implements CommandLineRunner {
 //
 //        );
 //
-        var xml = bus.execute(new GenerateAccessControlXmlCommand());
+//        var xml = bus.execute(new GenerateAccessControlXmlCommand());
+//
+//        redisTemplate.opsForHash().put(Caches.CONFIGURATIONS.name(), "acl.conf", xml);
+//
+//        System.out.println(xml);
+//
+//        var luaCli = new Lua("fire", "mepbx::agent", "configuration-loaded");
+//        var res = cliExecutor.submit(luaCli);
+//
+//        System.out.println(res.get(0));
 
-        redisTemplate.opsForHash().put(Caches.CONFIGURATIONS.name(), "acl.conf", xml);
-
-        System.out.println(xml);
-
-//        var domain = new Domain("voice.metechvn.com");
-//        domain.setDbHost("localhost");
-//        domain.setDbPassword("Default");
-//
-//        domains.save(domain);
-//
-//        resolver.setCurrentDomain("voice.metechvn.com");
-//
-//        var ext = new Extension();
-//        ext.setExtension(1000);
-//        ext.setAccountCode("");
-//        ext.setCallTimeout(20);
-//        ext.setDomain("public");
-//        ext.setPassword("public");
-//        ext.setEnabled(true);
-//        ext.setLimitMax(0);
-//        ext.setDialString("");
-//
-//        extensions.save(ext);
+//        bus.execute(new CreateExtensionCommand("10000", "voice.metechvn.com"));
     }
 }
