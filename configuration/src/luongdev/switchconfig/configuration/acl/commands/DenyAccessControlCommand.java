@@ -1,48 +1,71 @@
 package luongdev.switchconfig.configuration.acl.commands;
 
+import luongdev.cqrs.Request;
 import luongdev.switchconfig.configuration.acl.AccessControl;
-import luongld.cqrs.Request;
+import luongdev.switchconfig.configuration.acl.dto.AccessNode;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.UUID;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public class DenyAccessControlCommand implements Request<AccessControl> {
 
-    private UUID id;
-    private String cidr;
-    private String domain;
-    private String description;
+    private String name;
+    private Set<AccessNode> accessNodes;
 
     private DenyAccessControlCommand() {
+        accessNodes = new HashSet<>();
     }
 
-    public DenyAccessControlCommand(UUID id, String cidr, String domain, String description) {
-        assert id != null;
-        assert StringUtils.isNotEmpty(cidr) || StringUtils.isNotEmpty(domain);
-        this.id = id;
-        this.cidr = cidr;
-        this.domain = domain;
-        this.description = description;
+    public DenyAccessControlCommand(String name, String cidr, String domain, String description) {
+        this(name);
+
+        node(cidr, domain, description);
     }
 
-    public DenyAccessControlCommand(UUID id, String cidr, String domain) {
-        this(id, cidr, domain, null);
+    public DenyAccessControlCommand(String name, String cidr, String domain) {
+        this(name, cidr, domain, null);
     }
 
-    public UUID getId() {
-        return id;
+    public DenyAccessControlCommand(String name) {
+        this();
+
+        assert StringUtils.isNotEmpty(name);
+
+        this.name = name;
     }
 
-    public String getCidr() {
-        return cidr;
+    public DenyAccessControlCommand(String name, Collection<AccessNode> accessNodes) {
+        this(name);
+
+        if (accessNodes != null && !accessNodes.isEmpty()) this.accessNodes.addAll(accessNodes);
     }
 
-    public String getDomain() {
-        return domain;
+    public DenyAccessControlCommand node(String cidr, String domain, String description) {
+        this.accessNodes.add(new AccessNode(cidr, domain, description));
+
+        return this;
     }
 
-    public String getDescription() {
-        return description;
+    public DenyAccessControlCommand node(String cidr, String domain) {
+        return this.node(cidr, domain, null);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Set<AccessNode> getAccessNodes() {
+        return accessNodes;
+    }
+
+    public void setAccessNodes(Set<AccessNode> accessNodes) {
+        this.accessNodes = accessNodes;
     }
 
 }

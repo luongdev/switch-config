@@ -1,5 +1,6 @@
 package luongdev.switchconfig.configuration.acl.commands.handlers;
 
+import luongdev.cqrs.RequestHandler;
 import luongdev.switchconfig.common.util.JAXBUtil;
 import luongdev.switchconfig.common.xml.Document;
 import luongdev.switchconfig.common.xml.sections.ConfigurationSection;
@@ -11,7 +12,6 @@ import luongdev.switchconfig.configuration.acl.AccessControl;
 import luongdev.switchconfig.configuration.acl.AccessControlDetail;
 import luongdev.switchconfig.configuration.acl.AccessControls;
 import luongdev.switchconfig.configuration.acl.commands.GenerateAccessControlXmlCommand;
-import luongld.cqrs.RequestHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

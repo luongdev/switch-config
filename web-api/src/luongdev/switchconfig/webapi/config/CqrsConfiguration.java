@@ -1,6 +1,6 @@
 package luongdev.switchconfig.webapi.config;
 
-import luongld.cqrs.EnableCqrsBus;
+import luongdev.cqrs.EnableCqrsBus;
 import org.springframework.context.annotation.Configuration;
 
 @EnableCqrsBus

@@ -1,8 +1,8 @@
 package luongdev.switchconfig.domain.extension.commands;
 
+import luongdev.cqrs.Request;
 import luongdev.switchconfig.common.util.Utils;
 import luongdev.switchconfig.domain.extension.Extension;
-import luongld.cqrs.Request;
 import org.apache.commons.lang3.StringUtils;
 
 public class CreateExtensionCommand implements Request<Extension> {

@@ -1,11 +1,11 @@
 package luongdev.switchconfig.webapi;
 
+import luongdev.cqrs.Bus;
 import luongdev.switchconfig.common.esl.CliExecutor;
 import luongdev.switchconfig.domain.extension.Extensions;
 import luongdev.switchconfig.domain.extension.commands.CreateExtensionCommand;
 import luongdev.switchconfig.tenancy.Domains;
 import luongdev.switchconfig.tenancy.datasource.DomainIdentifierResolver;
-import luongld.cqrs.Bus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

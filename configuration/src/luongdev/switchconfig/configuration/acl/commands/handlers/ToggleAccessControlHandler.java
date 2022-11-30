@@ -1,16 +1,18 @@
 package luongdev.switchconfig.configuration.acl.commands.handlers;
 
+import luongdev.switchconfig.common.cqrs.EventRequestHandler;
 import luongdev.switchconfig.configuration.acl.AccessControl;
 import luongdev.switchconfig.configuration.acl.AccessControls;
 import luongdev.switchconfig.configuration.acl.commands.ToggleAccessControlCommand;
-import luongld.cqrs.RequestHandler;
+
+import luongdev.switchconfig.configuration.acl.events.AccessControlPersistedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 
 @Component
-public class ToggleAccessControlHandler implements RequestHandler<AccessControl, ToggleAccessControlCommand> {
+public class ToggleAccessControlHandler extends EventRequestHandler<AccessControl, ToggleAccessControlCommand> {
 
     private final AccessControls accessControls;
 
@@ -27,6 +29,8 @@ public class ToggleAccessControlHandler implements RequestHandler<AccessControl,
         accessControl.setAllow(!accessControl.isAllow());
         accessControl.getAccessControlDetails().forEach((k, v) -> v.setAllow(!v.isAllow()));
 
-        return accessControls.save(accessControl);
+        accessControl = accessControls.save(accessControl);
+
+        return withEvent(accessControl, new AccessControlPersistedEvent(this, accessControl));
     }
 }

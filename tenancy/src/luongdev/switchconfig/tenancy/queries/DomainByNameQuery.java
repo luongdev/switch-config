@@ -1,7 +1,7 @@
 package luongdev.switchconfig.tenancy.queries;
 
+import luongdev.cqrs.Request;
 import luongdev.switchconfig.tenancy.Domain;
-import luongld.cqrs.Request;
 
 public class DomainByNameQuery implements Request<Domain> {
 
