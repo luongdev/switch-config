@@ -1,8 +1,8 @@
 package luongdev.switchconfig.cluster.esl.cli;
 
 import luongdev.switchconfig.common.esl.Cli;
-import luongld.freeswitch.esl.InboundClient;
-import luongld.freeswitch.esl.transport.message.EslMessage;
+import luongdev.freeswitch.esl.InboundClient;
+import luongdev.freeswitch.esl.transport.message.EslMessage;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 

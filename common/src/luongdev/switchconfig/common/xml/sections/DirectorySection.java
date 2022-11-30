@@ -18,28 +18,15 @@ public final class DirectorySection extends Section {
     @XmlElementRef(name = "domain")
     private DirectoryDomain domain;
 
-    @XmlElementRef(name = "groups")
-    private DirectoryGroup groups;
-
     private DirectorySection() {
         super("directory");
     }
 
-    public DirectorySection(DirectoryDomain domain, Collection<Directory> directories) {
+    public DirectorySection(DirectoryDomain domain) {
         this();
         assert domain != null;
 
         this.domain = domain;
-        this.groups = new DirectoryGroup(new DirectoryGroup.Group(directories));
-    }
-
-    public DirectorySection(DirectoryDomain domain, Directory directory) {
-        this();
-        assert domain != null;
-        assert directory != null;
-
-        this.domain = domain;
-        this.groups = new DirectoryGroup(new DirectoryGroup.Group(directory));
     }
 
 
@@ -47,7 +34,4 @@ public final class DirectorySection extends Section {
         return domain;
     }
 
-    public DirectoryGroup getGroups() {
-        return groups;
-    }
 }

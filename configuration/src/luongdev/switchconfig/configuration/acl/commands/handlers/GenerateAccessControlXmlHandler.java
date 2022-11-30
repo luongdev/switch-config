@@ -1,6 +1,9 @@
 package luongdev.switchconfig.configuration.acl.commands.handlers;
 
+import luongdev.cqrs.RequestHandler;
 import luongdev.switchconfig.common.util.JAXBUtil;
+import luongdev.switchconfig.common.xml.Document;
+import luongdev.switchconfig.common.xml.sections.ConfigurationSection;
 import luongdev.switchconfig.common.xml.sections.configuration.accesscontrol.AccessControlConfiguration;
 import luongdev.switchconfig.common.xml.sections.configuration.accesscontrol.NetworkContainer;
 import luongdev.switchconfig.common.xml.sections.configuration.accesscontrol.NetworkList;
@@ -9,7 +12,6 @@ import luongdev.switchconfig.configuration.acl.AccessControl;
 import luongdev.switchconfig.configuration.acl.AccessControlDetail;
 import luongdev.switchconfig.configuration.acl.AccessControls;
 import luongdev.switchconfig.configuration.acl.commands.GenerateAccessControlXmlCommand;
-import luongld.cqrs.RequestHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +36,6 @@ public class GenerateAccessControlXmlHandler implements RequestHandler<String, G
         var networks = new ArrayList<NetworkList>();
 
         var accessControls = this.accessControls.findAll();
-
         var eventSocketControl = accessControls.stream().anyMatch(a -> "event_socket".equalsIgnoreCase(a.getName()));
 
         for (var accessControl : accessControls) {
@@ -69,8 +70,10 @@ public class GenerateAccessControlXmlHandler implements RequestHandler<String, G
         if (networks == null) networks = Collections.emptyList();
 
         var accessControlConfiguration = new AccessControlConfiguration(new NetworkContainer(networks));
+        var configurationSection = new ConfigurationSection(accessControlConfiguration);
+        var document = new Document(configurationSection);
         try {
-            return JAXBUtil.marshallObject(accessControlConfiguration, true);
+            return JAXBUtil.marshallObject(document, true);
         } catch (JAXBException ignored) {
             return AccessControlConfiguration.EMPTY_CONFIGURATION;
         }

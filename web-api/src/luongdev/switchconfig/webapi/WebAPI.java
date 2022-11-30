@@ -1,9 +1,11 @@
 package luongdev.switchconfig.webapi;
 
+import luongdev.cqrs.Bus;
+import luongdev.switchconfig.common.esl.CliExecutor;
 import luongdev.switchconfig.domain.extension.Extensions;
+import luongdev.switchconfig.domain.extension.commands.CreateExtensionCommand;
 import luongdev.switchconfig.tenancy.Domains;
 import luongdev.switchconfig.tenancy.datasource.DomainIdentifierResolver;
-import luongld.cqrs.Bus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -34,6 +36,8 @@ public class WebAPI implements CommandLineRunner {
     @Autowired
     RedisTemplate<String, String> redisTemplate;
 
+    @Autowired
+    CliExecutor cliExecutor;
 
     public static void main(String[] args) {
         SpringApplication.run(WebAPI.class, args);
@@ -42,7 +46,19 @@ public class WebAPI implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        redisTemplate.opsForHash().put("Object_key", "Hash_key", "Hash_value");
+//        resolver.publicDomain();
+//
+//        var domain = new Domain("voice.metechvn.com");
+//        domain.setDbPassword("Default");
+//        domain.setDbHost("localhost");
+//        domain.setDbPort((short) 5432);
+//        domain.setDbUser("postgres");
+//        domain.setEnabled(true);
+//
+//        domains.save(domain);
+
+
+//        redisTemplate.opsForHash().put("Object_key", "Hash_key", "Hash_value");
 //        resolver.publicDomain();
 //
 //        var a = bus.execute(new CreateAccessControlCommand(
@@ -56,26 +72,17 @@ public class WebAPI implements CommandLineRunner {
 //
 //        );
 //
-//        System.out.println(bus.execute(new GenerateAccessControlXmlCommand()));
+//        var xml = bus.execute(new GenerateAccessControlXmlCommand());
+//
+//        redisTemplate.opsForHash().put(Caches.CONFIGURATIONS.name(), "acl.conf", xml);
+//
+//        System.out.println(xml);
+//
+//        var luaCli = new Lua("fire", "mepbx::agent", "configuration-loaded");
+//        var res = cliExecutor.submit(luaCli);
+//
+//        System.out.println(res.get(0));
 
-//        var domain = new Domain("voice.metechvn.com");
-//        domain.setDbHost("localhost");
-//        domain.setDbPassword("Default");
-//
-//        domains.save(domain);
-//
-//        resolver.setCurrentDomain("voice.metechvn.com");
-//
-//        var ext = new Extension();
-//        ext.setExtension(1000);
-//        ext.setAccountCode("");
-//        ext.setCallTimeout(20);
-//        ext.setDomain("public");
-//        ext.setPassword("public");
-//        ext.setEnabled(true);
-//        ext.setLimitMax(0);
-//        ext.setDialString("");
-//
-//        extensions.save(ext);
+        bus.execute(new CreateExtensionCommand("10000", "voice.metechvn.com"));
     }
 }

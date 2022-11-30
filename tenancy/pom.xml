@@ -29,6 +29,18 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>luongdev</groupId>
+            <artifactId>common</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>luongdev</groupId>
+            <artifactId>cqrs</artifactId>
+            <version>0.1.0</version>
+        </dependency>
     </dependencies>
 
     <build>

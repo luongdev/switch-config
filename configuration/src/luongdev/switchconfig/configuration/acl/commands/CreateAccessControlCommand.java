@@ -1,7 +1,7 @@
 package luongdev.switchconfig.configuration.acl.commands;
 
+import luongdev.cqrs.Request;
 import luongdev.switchconfig.configuration.acl.AccessControl;
-import luongld.cqrs.Request;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;

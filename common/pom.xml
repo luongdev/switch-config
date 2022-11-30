@@ -32,9 +32,21 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
-            <groupId>luongld</groupId>
+            <groupId>luongdev</groupId>
             <artifactId>freeswitch-esl</artifactId>
-            <version>0.0.1</version>
+            <version>0.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>luongdev</groupId>
+            <artifactId>spring-cqrs</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.passay</groupId>
+            <artifactId>passay</artifactId>
+            <version>1.6.2</version>
         </dependency>
     </dependencies>
 

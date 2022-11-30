@@ -8,13 +8,11 @@ import java.util.Map;
 import java.util.UUID;
 
 @Entity
-@Table(name = "access_controls", uniqueConstraints = @UniqueConstraint(name = "unique_name", columnNames = "name"))
+@Table(name = "access_controls")
 public class AccessControl {
 
     @Id
-    private UUID id;
-
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
     @Column(name = "is_allow", nullable = false)
@@ -28,7 +26,6 @@ public class AccessControl {
     private final Map<UUID, AccessControlDetail> accessControlDetails = new HashMap<>();
 
     public AccessControl() {
-        this.id = UUID.randomUUID();
     }
 
     public AccessControl(String name, boolean allow, String description) {
@@ -55,14 +52,6 @@ public class AccessControl {
         if (!this.accessControlDetails.containsKey(id)) return;
 
         this.accessControlDetails.remove(id);
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public String getName() {

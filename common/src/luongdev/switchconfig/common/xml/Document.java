@@ -1,9 +1,7 @@
 package luongdev.switchconfig.common.xml;
 
 import javax.xml.bind.annotation.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @XmlRootElement(name = "document")
 @XmlAccessorType(XmlAccessType.NONE)
@@ -25,6 +23,10 @@ public class Document {
         if (sections == null || sections.isEmpty()) return;
 
         this.sections = new HashSet<>(sections);
+    }
+
+    public <T extends Section> Document(T section) {
+        this(List.of(section));
     }
 
     public String getType() {

@@ -10,8 +10,8 @@ import javax.persistence.Table;
 public class Extension {
 
     @Id
-    @Column(name = "extension")
-    private int extension;
+    @Column(name = "extension", length = 20)
+    private String extension;
 
     @Column(name = "password")
     private String password;
@@ -28,9 +28,6 @@ public class Extension {
     @Column(name = "call_timeout", nullable = false)
     private int callTimeout;
 
-    @Column(name = "dial_string", length = 510, nullable = false)
-    private String dialString;
-
     @Column(name = "force_ping", nullable = false)
     private boolean forcePing;
 
@@ -40,12 +37,23 @@ public class Extension {
     @Column(name = "domain", nullable = false)
     private String domain;
 
-    public int getExtension() {
+    public Extension() {
+        this.enabled = true;
+        this.forcePing = false;
+    }
+
+    public Extension(String extension, String domain) {
+        this();
+        this.extension = extension;
+        this.domain = domain;
+    }
+
+    public String getExtension() {
         return extension;
     }
 
-    public void setExtension(int extension) {
-        this.extension = Math.abs(extension);
+    public void setExtension(String extension) {
+        this.extension = extension;
     }
 
     public String getPassword() {
@@ -86,14 +94,6 @@ public class Extension {
 
     public void setCallTimeout(int callTimeout) {
         this.callTimeout = callTimeout;
-    }
-
-    public String getDialString() {
-        return dialString;
-    }
-
-    public void setDialString(String dialString) {
-        this.dialString = dialString;
     }
 
     public boolean isForcePing() {

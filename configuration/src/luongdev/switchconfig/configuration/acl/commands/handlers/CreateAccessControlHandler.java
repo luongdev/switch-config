@@ -1,13 +1,14 @@
 package luongdev.switchconfig.configuration.acl.commands.handlers;
 
+import luongdev.switchconfig.common.cqrs.EventRequestHandler;
 import luongdev.switchconfig.configuration.acl.AccessControl;
 import luongdev.switchconfig.configuration.acl.AccessControls;
 import luongdev.switchconfig.configuration.acl.commands.CreateAccessControlCommand;
-import luongld.cqrs.RequestHandler;
+import luongdev.switchconfig.configuration.acl.events.AccessControlPersistedEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CreateAccessControlHandler implements RequestHandler<AccessControl, CreateAccessControlCommand> {
+public class CreateAccessControlHandler extends EventRequestHandler<AccessControl, CreateAccessControlCommand> {
 
     private final AccessControls accessControls;
 
@@ -22,9 +23,9 @@ public class CreateAccessControlHandler implements RequestHandler<AccessControl,
         for (var allow : cmd.getAllows().entrySet()) accessControl.addDetail(allow.getKey(), allow.getValue(), true);
         for (var deny : cmd.getDenies().entrySet()) accessControl.addDetail(deny.getKey(), deny.getValue(), false);
 
-        accessControls.save(accessControl);
+        accessControl = accessControls.save(accessControl);
 
-        return accessControl;
+        return withEvent(accessControl, new AccessControlPersistedEvent(this, accessControl));
     }
 
 }

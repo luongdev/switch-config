@@ -1,9 +1,16 @@
 package luongdev.switchconfig.common.util;
 
+import org.passay.CharacterData;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.PasswordGenerator;
+
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-public class Utils {
+import static org.passay.IllegalCharacterRule.ERROR_CODE;
+
+public final class Utils {
     private Utils() {}
 
 
@@ -67,5 +74,35 @@ public class Utils {
         }
 
         return sb.toString();
+    }
+
+    public static String randomPassword(int len) {
+        var gen = new PasswordGenerator();
+        var lowerCaseRule = new CharacterRule(EnglishCharacterData.LowerCase);
+        lowerCaseRule.setNumberOfCharacters(4);
+
+        CharacterRule upperCaseRule = new CharacterRule(EnglishCharacterData.UpperCase);
+        upperCaseRule.setNumberOfCharacters(4);
+
+        CharacterRule digitRule = new CharacterRule(EnglishCharacterData.Digit);
+        digitRule.setNumberOfCharacters(2);
+
+        var specialChars = new CharacterData() {
+            public String getErrorCode() {
+                return ERROR_CODE;
+            }
+
+            public String getCharacters() {
+                return "!@#$%^&*()_+";
+            }
+        };
+        CharacterRule splCharRule = new CharacterRule(specialChars);
+        splCharRule.setNumberOfCharacters(2);
+
+        return gen.generatePassword(Math.max(len, 10), splCharRule, lowerCaseRule, upperCaseRule, digitRule);
+    }
+
+    public static String randomPassword() {
+        return randomPassword(15);
     }
 }

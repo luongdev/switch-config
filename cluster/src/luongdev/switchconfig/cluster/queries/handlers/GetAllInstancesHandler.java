@@ -1,9 +1,9 @@
 package luongdev.switchconfig.cluster.queries.handlers;
 
+import luongdev.cqrs.RequestHandler;
 import luongdev.switchconfig.cluster.Instance;
 import luongdev.switchconfig.cluster.Instances;
 import luongdev.switchconfig.cluster.queries.GetAllInstancesQuery;
-import luongld.cqrs.RequestHandler;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

@@ -4,6 +4,8 @@ import luongdev.switchconfig.common.xml.shared.ParamList;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.xml.bind.annotation.*;
+import java.util.Collection;
+import java.util.List;
 
 @XmlRootElement(name = "domain")
 @XmlAccessorType(XmlAccessType.NONE)
@@ -18,16 +20,25 @@ public class DirectoryDomain {
     @XmlElementRef(name = "params")
     private final ParamList params;
 
+    @XmlElementRef(name = "groups")
+    private DirectoryGroup groups;
+
+
     private DirectoryDomain() {
         this.alias = true;
         this.params = new ParamList();
     }
 
-    public DirectoryDomain(String name) {
+    public DirectoryDomain(String name, Collection<Directory> directories) {
         this();
         assert StringUtils.isNotEmpty(name);
 
         this.name = name;
+        this.groups = new DirectoryGroup(new DirectoryGroup.Group(directories));
+    }
+
+    public DirectoryDomain(String name, Directory directory) {
+        this(name, List.of(directory));
     }
 
     public DirectoryDomain param(String name, Object value) {
@@ -54,5 +65,9 @@ public class DirectoryDomain {
 
     public ParamList getParams() {
         return params;
+    }
+
+    public DirectoryGroup getGroups() {
+        return groups;
     }
 }

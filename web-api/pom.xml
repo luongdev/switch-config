@@ -54,9 +54,9 @@
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
-            <groupId>luongld</groupId>
+            <groupId>luongdev</groupId>
             <artifactId>spring-cqrs</artifactId>
-            <version>0.0.1</version>
+            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
 
