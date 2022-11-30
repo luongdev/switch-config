@@ -23,13 +23,16 @@ public class JAXBUtil {
     public static <T> String marshallObject(T instance, boolean format) throws JAXBException {
         var context = JAXBContext.newInstance(instance.getClass());
         var marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_ENCODING, StandardCharsets.UTF_8.name());
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, format);
 
         try (var os = new ByteArrayOutputStream()) {
             marshaller.marshal(instance, os);
 
             return os.toString(StandardCharsets.UTF_8);
-        } catch (IOException ignored) {return null;}
+        } catch (IOException e) {
+            throw new JAXBException(e);
+        }
     }
 
     public static <T> String marshallObject(T instance) throws JAXBException {

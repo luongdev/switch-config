@@ -83,6 +83,6 @@ public class WebAPI implements CommandLineRunner {
 //
 //        System.out.println(res.get(0));
 
-        bus.execute(new CreateExtensionCommand("10000", "voice1.metechvn.com"));
+        bus.execute(new CreateExtensionCommand("10000", "voice.metechvn.com"));
     }
 }
