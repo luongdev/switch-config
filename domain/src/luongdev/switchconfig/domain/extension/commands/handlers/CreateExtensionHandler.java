@@ -36,6 +36,10 @@ public class CreateExtensionHandler extends EventRequestHandler<Extension, Creat
 
         var extension = new Extension(cmd.getExtension(), cmd.getDomain());
         extension.setPassword(cmd.getPassword());
+        extension.setLimitMax(cmd.getLimitMax());
+        extension.setCallTimeout(cmd.getCallTimeout());
+        extension.setAccountCode(cmd.getAccountCode());
+        extension.setForcePing(cmd.isForcePing());
 
         extensions.save(extension);
 

@@ -1,9 +1,7 @@
 package luongdev.switchconfig.domain.extension;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "extensions")
@@ -36,6 +34,9 @@ public class Extension {
 
     @Column(name = "domain", nullable = false)
     private String domain;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Set<ExtensionGroup> groups;
 
     public Extension() {
         this.enabled = true;
