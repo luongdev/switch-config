@@ -1,52 +1,50 @@
 package luongdev.switchconfig.domain.extension;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "extensions")
-public class Extension {
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Extension {
 
     @Id
-    @Column(name = "extension", length = 20)
+    private UUID id;
+
+    @Column(name = "extension", length = 20, unique = true, nullable = false)
     private String extension;
 
-    @Column(name = "password")
-    private String password;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", length = 36)
+    private ExtensionType type;
 
-    @Column(name = "account_code")
-    private String accountCode;
-
-    @Column(name = "limit_max", nullable = false)
-    private int limitMax;
-
-    @Column(name = "limit_destination")
-    private String limitDestination;
-
-    @Column(name = "call_timeout", nullable = false)
-    private int callTimeout;
-
-    @Column(name = "force_ping", nullable = false)
-    private boolean forcePing;
-
-    @Column(name = "enabled", nullable = false)
-    private boolean enabled;
+    @Column(name = "xml", length = 2040)
+    private String xml;
 
     @Column(name = "domain", nullable = false)
     private String domain;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private Set<ExtensionGroup> groups;
-
     public Extension() {
-        this.enabled = true;
-        this.forcePing = false;
+        this.id = UUID.randomUUID();
     }
 
-    public Extension(String extension, String domain) {
+    protected Extension(ExtensionType type) {
         this();
-        this.extension = extension;
+        this.type = type;
+    }
+
+    protected Extension(ExtensionType type, String extension, String domain) {
+        this(type);
         this.domain = domain;
+        this.extension = extension;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getExtension() {
@@ -57,60 +55,20 @@ public class Extension {
         this.extension = extension;
     }
 
-    public String getPassword() {
-        return password;
+    public ExtensionType getType() {
+        return type;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setType(ExtensionType type) {
+        this.type = type;
     }
 
-    public String getAccountCode() {
-        return accountCode;
+    public String getXml() {
+        return xml;
     }
 
-    public void setAccountCode(String accountCode) {
-        this.accountCode = accountCode;
-    }
-
-    public int getLimitMax() {
-        return limitMax;
-    }
-
-    public void setLimitMax(int limitMax) {
-        this.limitMax = limitMax;
-    }
-
-    public String getLimitDestination() {
-        return limitDestination;
-    }
-
-    public void setLimitDestination(String limitDestination) {
-        this.limitDestination = limitDestination;
-    }
-
-    public int getCallTimeout() {
-        return callTimeout;
-    }
-
-    public void setCallTimeout(int callTimeout) {
-        this.callTimeout = callTimeout;
-    }
-
-    public boolean isForcePing() {
-        return forcePing;
-    }
-
-    public void setForcePing(boolean forcePing) {
-        this.forcePing = forcePing;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public void setXml(String xml) {
+        this.xml = xml;
     }
 
     public String getDomain() {

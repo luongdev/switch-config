@@ -2,8 +2,10 @@ package luongdev.switchconfig.webapi;
 
 import luongdev.cqrs.Bus;
 import luongdev.switchconfig.common.esl.CliExecutor;
+import luongdev.switchconfig.domain.directory.Group;
+import luongdev.switchconfig.domain.directory.Users;
+import luongdev.switchconfig.domain.directory.builder.UserBuilder;
 import luongdev.switchconfig.domain.extension.Extensions;
-import luongdev.switchconfig.domain.extension.commands.CreateExtensionCommand;
 import luongdev.switchconfig.tenancy.Domains;
 import luongdev.switchconfig.tenancy.datasource.DomainIdentifierResolver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class WebAPI implements CommandLineRunner {
     Domains domains;
 
     @Autowired
+    Users users;
+
+    @Autowired
     Bus bus;
 
     @Autowired
@@ -39,6 +44,7 @@ public class WebAPI implements CommandLineRunner {
     @Autowired
     CliExecutor cliExecutor;
 
+
     public static void main(String[] args) {
         SpringApplication.run(WebAPI.class, args);
     }
@@ -46,7 +52,60 @@ public class WebAPI implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
+        var group1 = new Group("10001", "voice.metechvn.com", "Group 1");
+        var group2 = new Group("10002", "voice.metechvn.com", "Group 2");
+        var group3 = new Group("10003", "voice.metechvn.com", "Group 3");
+
+        var builder = UserBuilder.builder()
+                .group(group1)
+                .group(group2)
+                .group(group3)
+                .name("Agent 1000")
+                .extension("1000")
+                .record("all")
+                .domain("voice.metechvn.com");
+
+
+        var user = builder.build();
+        users.save(user);
+
+        System.out.println(user);
+
 //        resolver.publicDomain();
+//
+//        var user = new User();
+//        user.setExtension("1000");
+//        user.setPassword("Abc@123");
+//        user.setDomain("public");
+//        user
+//                .variable("record_stereo", "true")
+//                .variable("presence_id", String.format("%s@%s", user.getExtension(), user.getDomain()))
+//                .variable("export_vars", "domain_name")
+//                .variable("domain_name", user.getDomain())
+//                .variable("extension", user.getExtension())
+//                .variable("password", user.getPassword())
+//                .param("dial-string", "{sip_invite_domain=${domain_name},leg_timeout=${call_timeout},presence_id=${dialed_user}@${dialed_domain}}${sofia_contact(*/${dialed_user}@${dialed_domain})}")
+//        ;
+//
+//        user.join(new Group("1000", "public", "Group_1000"));
+//
+//        users.save(user);
+//
+//
+//        var users = this.users.findAllIncludeSettingsAndGroups();
+//
+//        for (var user : users) {
+//            System.out.println(user.getExtension());
+//
+//            for (var entry : user.getSettings().entrySet()) {
+//                System.out.printf("%s = %s%n", entry.getKey(), entry.getValue().getValue());
+//            }
+//
+//            for (var entry : user.getGroups().entrySet()) {
+//                System.out.println("Group = " + entry.getValue().getName());
+//            }
+//        }
+
 //
 //        var domain = new Domain("voice.metechvn.com");
 //        domain.setDbPassword("Default");
@@ -83,6 +142,6 @@ public class WebAPI implements CommandLineRunner {
 //
 //        System.out.println(res.get(0));
 
-        bus.execute(new CreateExtensionCommand("10000", "voice.metechvn.com"));
+//        bus.execute(new CreateExtensionCommand("10000", "voice.metechvn.com"));
     }
 }
