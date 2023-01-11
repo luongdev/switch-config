@@ -2,6 +2,12 @@ package luongdev.switchconfig.webapi;
 
 import luongdev.cqrs.Bus;
 import luongdev.switchconfig.common.esl.CliExecutor;
+import luongdev.switchconfig.common.util.JAXBUtil;
+import luongdev.switchconfig.common.xml.sections.DirectorySection;
+import luongdev.switchconfig.common.xml.sections.directory.DomainUser;
+import luongdev.switchconfig.common.xml.sections.directory.UserBase;
+import luongdev.switchconfig.common.xml.sections.directory.UserPointer;
+import luongdev.switchconfig.common.xml.sections.directory.UserXml;
 import luongdev.switchconfig.domain.directory.Group;
 import luongdev.switchconfig.domain.directory.Users;
 import luongdev.switchconfig.domain.directory.builder.UserBuilder;
@@ -13,6 +19,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.redis.core.RedisTemplate;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 
 @SpringBootApplication(scanBasePackages = {
         "luongdev.switchconfig.tenancy",
@@ -45,12 +54,13 @@ public class WebAPI implements CommandLineRunner {
     CliExecutor cliExecutor;
 
 
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws JAXBException {
         SpringApplication.run(WebAPI.class, args);
     }
 
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws JAXBException {
 
         var group1 = new Group("10001", "voice.metechvn.com", "Group 1");
         var group2 = new Group("10002", "voice.metechvn.com", "Group 2");
@@ -67,9 +77,29 @@ public class WebAPI implements CommandLineRunner {
 
 
         var user = builder.build();
-        users.save(user);
 
-        System.out.println(user);
+
+        var xmlUser = new UserXml();
+        xmlUser.setId(user.getExtension());
+
+        var section = new DirectorySection(new DomainUser(user.getDomain(), xmlUser));
+        if (user.getSettings() != null && !user.getSettings().isEmpty()) {
+            for (var entry : user.getSettings().entrySet()) {
+                if (entry.getValue() == null) continue;
+
+                if (entry.getValue().isVariable()) {
+                    xmlUser.variable(entry.getKey(), entry.getValue().getValue());
+                } else {
+                    xmlUser.param(entry.getKey(), entry.getValue().getValue());
+                }
+            }
+        }
+
+        user.setXml(JAXBUtil.marshallObject(section, false));
+
+        users.save(user);
+//
+//        System.out.println(user);
 
 //        resolver.publicDomain();
 //

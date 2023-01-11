@@ -26,11 +26,6 @@ public class Group extends Extension {
         this.users = new HashMap<>();
     }
 
-    @Override
-    protected String generateXml() {
-        return null;
-    }
-
     public Group(String extension, String domain, String name) {
         super(ExtensionType.GROUP, extension, domain);
 

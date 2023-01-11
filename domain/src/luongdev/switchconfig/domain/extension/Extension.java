@@ -39,14 +39,6 @@ public abstract class Extension {
         this.extension = extension;
     }
 
-    @PrePersist
-    @PreUpdate
-    void xml() {
-        this.xml = generateXml();
-    }
-
-    protected abstract String generateXml();
-
     public UUID getId() {
         return id;
     }

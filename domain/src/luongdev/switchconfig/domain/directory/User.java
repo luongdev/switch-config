@@ -38,11 +38,6 @@ public class User extends Extension {
         this.groups = new HashMap<>();
     }
 
-    @Override
-    protected String generateXml() {
-        return null;
-    }
-
     public User(String extension, String domain, String name) {
         this();
 
