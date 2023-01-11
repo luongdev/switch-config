@@ -6,9 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -28,19 +26,21 @@ public class User extends Extension {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private Map<String, UserSetting> settings;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "user_groups",
-            joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "group_id")
-    )
-    private Set<Group> groups;
+    @MapKeyColumn(name = "group_extension")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Map<String, UserGroup> groups;
 
     public User() {
         super(ExtensionType.DIRECTORY);
 
         this.enabled = true;
         this.settings = new HashMap<>();
-        this.groups = new HashSet<>();
+        this.groups = new HashMap<>();
+    }
+
+    @Override
+    protected String generateXml() {
+        return null;
     }
 
     public User(String extension, String domain, String name) {
@@ -80,11 +80,9 @@ public class User extends Extension {
     public User join(Group group) {
         if (group == null || StringUtils.isEmpty(group.getExtension())) return this;
 
-        if (group.getUsers() == null) {
-            group.setUsers(new HashMap<>());
-            group.addUser(this);
-        }
-        groups.add(group);
+        if (this.groups.containsKey(group.getExtension())) return this;
+
+        this.groups.put(group.getExtension(), new UserGroup(this, group));
 
         return this;
     }
@@ -137,11 +135,11 @@ public class User extends Extension {
         this.settings = settings;
     }
 
-    public Set<Group> getGroups() {
+    public Map<String, UserGroup> getGroups() {
         return groups;
     }
 
-    public void setGroups(Set<Group> groups) {
+    public void setGroups(Map<String, UserGroup> groups) {
         this.groups = groups;
     }
 }

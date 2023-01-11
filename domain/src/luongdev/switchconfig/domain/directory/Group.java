@@ -16,18 +16,19 @@ public class Group extends Extension {
     @Column(name = "name", length = 100, nullable = false)
     private String name;
 
-    @MapKeyColumn(name = "extension")
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "user_groups",
-            joinColumns = @JoinColumn(name = "group_id"), inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private Map<String, User> users;
+    @MapKeyColumn(name = "user_extension")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Map<String, UserGroup> users;
 
     public Group() {
         super(ExtensionType.GROUP);
 
         this.users = new HashMap<>();
+    }
+
+    @Override
+    protected String generateXml() {
+        return null;
     }
 
     public Group(String extension, String domain, String name) {
@@ -45,9 +46,7 @@ public class Group extends Extension {
 
         if (users.containsKey(user.getExtension())) return this;
 
-        user.join(this);
-
-        users.put(user.getExtension(), user);
+        users.put(user.getExtension(), new UserGroup(user, this));
 
         return this;
     }
@@ -74,11 +73,11 @@ public class Group extends Extension {
         this.name = name;
     }
 
-    public Map<String, User> getUsers() {
+    public Map<String, UserGroup> getUsers() {
         return users;
     }
 
-    public void setUsers(Map<String, User> users) {
+    public void setUsers(Map<String, UserGroup> users) {
         this.users = users;
     }
 }
