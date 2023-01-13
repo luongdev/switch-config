@@ -9,24 +9,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "domain")
 @XmlAccessorType(XmlAccessType.NONE)
-public class DomainUser extends Domain {
+public class DomainGroup extends Domain {
 
     @XmlElementRef
-    private XmlUser user;
+    private Group group;
 
-    public DomainUser() {
+    public DomainGroup() {
         super(null);
     }
 
-    public DomainUser(String name, XmlUser user) {
+    public DomainGroup(String name, Group group) {
         super(name);
 
-        assert user != null;
+        assert group != null;
 
-        this.user = user;
+        this.group = group;
     }
 
-    public void setUser(XmlUser user) {
-        this.user = user;
+    public void setGroup(Group group) {
+        this.group = group;
     }
 }

@@ -4,11 +4,12 @@ import luongdev.cqrs.Bus;
 import luongdev.switchconfig.common.esl.CliExecutor;
 import luongdev.switchconfig.common.util.JAXBUtil;
 import luongdev.switchconfig.common.xml.sections.DirectorySection;
+import luongdev.switchconfig.common.xml.sections.directory.DomainGroup;
 import luongdev.switchconfig.common.xml.sections.directory.DomainUser;
-import luongdev.switchconfig.common.xml.sections.directory.UserBase;
-import luongdev.switchconfig.common.xml.sections.directory.UserPointer;
-import luongdev.switchconfig.common.xml.sections.directory.UserXml;
+import luongdev.switchconfig.common.xml.sections.directory.PointerUser;
+import luongdev.switchconfig.common.xml.sections.directory.XmlUser;
 import luongdev.switchconfig.domain.directory.Group;
+import luongdev.switchconfig.domain.directory.Groups;
 import luongdev.switchconfig.domain.directory.Users;
 import luongdev.switchconfig.domain.directory.builder.UserBuilder;
 import luongdev.switchconfig.domain.extension.Extensions;
@@ -19,8 +20,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
 @SpringBootApplication(scanBasePackages = {
@@ -45,6 +46,9 @@ public class WebAPI implements CommandLineRunner {
     Users users;
 
     @Autowired
+    Groups groups;
+
+    @Autowired
     Bus bus;
 
     @Autowired
@@ -60,45 +64,45 @@ public class WebAPI implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws JAXBException {
 
-        var group1 = new Group("10001", "voice.metechvn.com", "Group 1");
-        var group2 = new Group("10002", "voice.metechvn.com", "Group 2");
-        var group3 = new Group("10003", "voice.metechvn.com", "Group 3");
-
+    @Transactional(rollbackFor = Exception.class, transactionManager = "publicTransactionManager")
+    public void run(String... args) {
         var builder = UserBuilder.builder()
-                .group(group1)
-                .group(group2)
-                .group(group3)
                 .name("Agent 1000")
                 .extension("1000")
                 .record("all")
                 .domain("voice.metechvn.com");
 
 
-        var user = builder.build();
+        var user1 = builder.build();
+
+        var user2 = builder.name("Agent 10001").extension("1001").build();
+        var user3 = builder.name("Agent 10002").extension("1002").build();
+        var user4 = builder.name("Agent 10003").extension("1003").build();
+        var user5 = builder.name("Agent 10004").extension("1004").build();
 
 
-        var xmlUser = new UserXml();
-        xmlUser.setId(user.getExtension());
+        users.save(user1);
+        users.save(user2);
+        users.save(user3);
+        users.save(user4);
+        users.save(user5);
 
-        var section = new DirectorySection(new DomainUser(user.getDomain(), xmlUser));
-        if (user.getSettings() != null && !user.getSettings().isEmpty()) {
-            for (var entry : user.getSettings().entrySet()) {
-                if (entry.getValue() == null) continue;
 
-                if (entry.getValue().isVariable()) {
-                    xmlUser.variable(entry.getKey(), entry.getValue().getValue());
-                } else {
-                    xmlUser.param(entry.getKey(), entry.getValue().getValue());
-                }
-            }
-        }
+        var group1 = new Group("10001", "voice.metechvn.com", "Group 1")
+                .addUser(user1)
+                .addUser(user2)
+                .addUser(user3)
+                .addUser(user4)
+                .addUser(user5)
+                ;
 
-        user.setXml(JAXBUtil.marshallObject(section, false));
 
-        users.save(user);
-//
+        groups.save(group1);
+
+
+
+        //
 //        System.out.println(user);
 
 //        resolver.publicDomain();

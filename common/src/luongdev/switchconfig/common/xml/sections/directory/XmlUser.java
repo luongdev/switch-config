@@ -8,18 +8,18 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "user")
-public class UserXml extends UserBase {
+public class XmlUser extends User {
 
     @XmlElementRef(name = "params", required = false)
     private ParamList params;
 
     @XmlElementRef(name = "variables", required = false)
     private VariableList variables;
-    public UserXml() {
+    public XmlUser() {
         super(null);
     }
 
-    public UserXml param(String key, Object value) {
+    public XmlUser param(String key, Object value) {
         if (StringUtils.isEmpty(key) || value == null) return this;
 
         if (params == null) params = new ParamList();
@@ -29,7 +29,7 @@ public class UserXml extends UserBase {
         return this;
     }
 
-    public UserXml variable(String key, Object value) {
+    public XmlUser variable(String key, Object value) {
         if (StringUtils.isEmpty(key) || value == null) return this;
 
         if (variables == null) variables = new VariableList();

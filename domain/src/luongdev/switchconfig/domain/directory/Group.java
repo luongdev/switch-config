@@ -1,10 +1,16 @@
 package luongdev.switchconfig.domain.directory;
 
+import luongdev.switchconfig.common.util.JAXBUtil;
+import luongdev.switchconfig.common.xml.sections.DirectorySection;
+import luongdev.switchconfig.common.xml.sections.directory.DomainGroup;
+import luongdev.switchconfig.common.xml.sections.directory.PointerUser;
 import luongdev.switchconfig.domain.extension.Extension;
 import luongdev.switchconfig.domain.extension.ExtensionType;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
+import javax.xml.bind.JAXBException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,8 +28,6 @@ public class Group extends Extension {
 
     public Group() {
         super(ExtensionType.GROUP);
-
-        this.users = new HashMap<>();
     }
 
     public Group(String extension, String domain, String name) {
@@ -39,9 +43,13 @@ public class Group extends Extension {
     public Group addUser(User user) {
         if (user == null || StringUtils.isEmpty(user.getExtension())) return this;
 
+        if (users == null) users = new HashMap<>();
+
         if (users.containsKey(user.getExtension())) return this;
 
         users.put(user.getExtension(), new UserGroup(user, this));
+
+        generateXml();
 
         return this;
     }
@@ -51,6 +59,8 @@ public class Group extends Extension {
 
         users.remove(extension);
 
+        generateXml();
+
         return this;
     }
 
@@ -58,6 +68,20 @@ public class Group extends Extension {
         if (user == null) return this;
 
         return this.rmUser(user.getExtension());
+    }
+
+    public void generateXml() {
+        var pointers = new ArrayList<PointerUser>();
+        if (users != null && !users.isEmpty()) {
+            pointers.addAll(users.values().stream().map(u -> new PointerUser(u.getUserExtension())).toList());
+        }
+
+        var xmlGroup = new luongdev.switchconfig.common.xml.sections.directory.Group(name, pointers);
+        var section = new DirectorySection(new DomainGroup(getDomain(), xmlGroup));
+
+        try {
+            setXml(JAXBUtil.marshallObject(section, false));
+        } catch (JAXBException ignored) { }
     }
 
     public String getName() {

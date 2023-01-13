@@ -1,10 +1,15 @@
 package luongdev.switchconfig.domain.directory;
 
+import luongdev.switchconfig.common.util.JAXBUtil;
+import luongdev.switchconfig.common.xml.sections.DirectorySection;
+import luongdev.switchconfig.common.xml.sections.directory.DomainUser;
+import luongdev.switchconfig.common.xml.sections.directory.XmlUser;
 import luongdev.switchconfig.domain.extension.Extension;
 import luongdev.switchconfig.domain.extension.ExtensionType;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
+import javax.xml.bind.JAXBException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +32,7 @@ public class User extends Extension {
     private Map<String, UserSetting> settings;
 
     @MapKeyColumn(name = "group_extension")
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "user")
     private Map<String, UserGroup> groups;
 
     public User() {
@@ -61,6 +66,8 @@ public class User extends Extension {
             setting.setValue(String.valueOf(value));
         }
 
+        generateXml();
+
         return this;
     }
 
@@ -72,14 +79,26 @@ public class User extends Extension {
         return setting == null ? null : setting.getKey();
     }
 
-    public User join(Group group) {
-        if (group == null || StringUtils.isEmpty(group.getExtension())) return this;
+    public void generateXml() {
+        var xmlUser = new XmlUser();
+        xmlUser.setId(getExtension());
 
-        if (this.groups.containsKey(group.getExtension())) return this;
+        var section = new DirectorySection(new DomainUser(getDomain(), xmlUser));
+        if (getSettings() != null && !getSettings().isEmpty()) {
+            for (var entry : getSettings().entrySet()) {
+                if (entry.getValue() == null) continue;
 
-        this.groups.put(group.getExtension(), new UserGroup(this, group));
+                if (entry.getValue().isVariable()) {
+                    xmlUser.variable(entry.getKey(), entry.getValue().getValue());
+                } else {
+                    xmlUser.param(entry.getKey(), entry.getValue().getValue());
+                }
+            }
+        }
 
-        return this;
+        try {
+            setXml(JAXBUtil.marshallObject(section, false));
+        } catch (JAXBException ignored) { }
     }
 
     public User variable(String key, Object value) {
@@ -94,6 +113,8 @@ public class User extends Extension {
         if (StringUtils.isEmpty(key)) return this;
 
         settings.remove(key);
+
+        generateXml();
 
         return this;
     }

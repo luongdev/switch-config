@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
 @XmlAccessorType(XmlAccessType.NONE)
-public abstract class UserBase {
+public abstract class User {
 
     @XmlAttribute(name = "id", required = true)
     protected String id;
@@ -13,9 +13,9 @@ public abstract class UserBase {
     @XmlAttribute(name = "type")
     protected String type;
 
-    private UserBase() {}
+    private User() {}
 
-    protected UserBase(String type) {
+    protected User(String type) {
         this.type = type;
     }
 

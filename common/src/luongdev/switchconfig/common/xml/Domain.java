@@ -1,5 +1,6 @@
 package luongdev.switchconfig.common.xml;
 
+import luongdev.switchconfig.common.xml.sections.directory.DomainGroup;
 import luongdev.switchconfig.common.xml.sections.directory.DomainUser;
 import luongdev.switchconfig.common.xml.shared.ParamList;
 import luongdev.switchconfig.common.xml.shared.VariableList;
@@ -8,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso({ DomainUser.class })
+@XmlSeeAlso({ DomainUser.class, DomainGroup.class })
 public abstract class Domain {
 
     @XmlAttribute(required = true)

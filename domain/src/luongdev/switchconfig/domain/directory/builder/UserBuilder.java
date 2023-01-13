@@ -12,7 +12,6 @@ import java.util.Set;
 public final class UserBuilder {
 
     private UserBuilder() {
-        this.groups = new HashSet<>();
         this.callTimeout = 20;
         this.limitMax = 0;
         this.limitDestination = "error/user_busy";
@@ -28,7 +27,6 @@ public final class UserBuilder {
     private int callTimeout;
     private int limitMax;
     private String limitDestination;
-    private final Set<Group> groups;
 
     public static UserBuilder builder() {
         return new UserBuilder();
@@ -88,18 +86,6 @@ public final class UserBuilder {
         return this;
     }
 
-    public UserBuilder groups(Collection<Group> groups) {
-        if (groups != null && !groups.isEmpty()) this.groups.addAll(groups);
-
-        return this;
-    }
-
-    public UserBuilder group(Group group) {
-        if (group != null) this.groups.add(group);
-
-        return this;
-    }
-
     public User build() {
         if (StringUtils.isEmpty(extension)) throw new IllegalArgumentException("extension required!");
         if (StringUtils.isEmpty(domain)) throw new IllegalArgumentException("domain required!");
@@ -142,7 +128,15 @@ public final class UserBuilder {
 
         user.variable("limit_destination", limitDestination);
 
-        for (var group : groups) user.join(group);
+        user.param(
+                "dial-string",
+                String.format("{sip_invite_domain=%s,leg_timeout=%s,presence_id=%s}${sofia_contact(*/%s)}",
+                    domain,
+                    callTimeout,
+                    domainExtension,
+                    domainExtension
+                )
+        );
 
         return user;
     }

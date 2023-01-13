@@ -8,13 +8,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "user")
 @XmlAccessorType(XmlAccessType.NONE)
-public class UserPointer extends UserBase {
+public class PointerUser extends User {
 
-    public UserPointer() {
+    public PointerUser() {
         super("pointer");
     }
 
-    public UserPointer(String id) {
+    public PointerUser(String id) {
         this();
 
         assert StringUtils.isNotEmpty(id);
